@@ -52,3 +52,9 @@ CREATE TABLE IF NOT EXISTS `champion_bans` (
     ban_10 varchar(20) NOT NULL,
     PRIMARY KEY (`match_id`)
 ) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `champions` (
+    champion_id int NOT NULL,
+    champion_name varchar(20) NOT NULL,
+    PRIMARY KEY (`champion_id`)
+) DEFAULT CHARSET=utf8;
