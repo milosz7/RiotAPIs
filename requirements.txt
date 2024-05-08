@@ -2,6 +2,7 @@ numpy
 pandas
 matplotlib
 seaborn
-python-dotenv
+python-dotenv~=1.0.1
 graphviz
 requests
+PyMySQL~=1.1.0
