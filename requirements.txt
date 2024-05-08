@@ -5,3 +5,4 @@ seaborn
 python-dotenv
 graphviz
 requests
+jupyter
