@@ -12,5 +12,43 @@ CREATE TABLE IF NOT EXISTS `match_data` (
   PRIMARY KEY (`match_id`)
 ) DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `player_data` (
+    id int NOT NULL AUTO_INCREMENT,
+    match_id varchar(15) NOT NULL,
+    team_id varchar(4) NOT NULL,
+    lane varchar(4) NOT NULL,
+    'rank' varchar(10) NOT NULL,
+    division tinyint NOT NULL,
+    champion_name varchar(20) NOT NULL,
+    first_blood tinyint NOT NULL,
+    kills int NOT NULL,
+    deaths int NOT NULL,
+    assists int NOT NULL,
+    dmg_per_min int NOT NULL,
+    dmg_taken_per_min int NOT NULL,
+    total_time_dead int NOT NULL,
+    gold_per_min int NOT NULL,
+    wards_placed int NOT NULL,
+    sight_wards_bought int NOT NULL,
+    wards_destroyed int NOT NULL,
+    vision_score_per_minute int NOT NULL,
+    dmg_to_towers int NOT NULL,
+    cs int NOT NULL,
+    missing_pings int NOT NULL,
+    PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8;
 
-
+CREATE TABLE IF NOT EXISTS `champion_bans` (
+    match_id varchar(15) NOT NULL,
+    ban_1 varchar(20) NOT NULL,
+    ban_2 varchar(20) NOT NULL,
+    ban_3 varchar(20) NOT NULL,
+    ban_4 varchar(20) NOT NULL,
+    ban_5 varchar(20) NOT NULL,
+    ban_6 varchar(20) NOT NULL,
+    ban_7 varchar(20) NOT NULL,
+    ban_8 varchar(20) NOT NULL,
+    ban_9 varchar(20) NOT NULL,
+    ban_10 varchar(20) NOT NULL,
+    PRIMARY KEY (`match_id`)
+) DEFAULT CHARSET=utf8;
