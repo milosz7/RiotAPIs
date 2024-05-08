@@ -1,4 +1,4 @@
-# Jeremi Torój - 8/05/2024
+# Jeremi Torój - 8/05/2024 a
 
 CREATE DATABASE IF NOT EXISTS 'riot_api_data' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `riot_api_data`;
