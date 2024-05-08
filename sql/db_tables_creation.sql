@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `player_data` (
     wards_destroyed int NOT NULL,
     vision_score_per_minute int NOT NULL,
     dmg_to_towers int NOT NULL,
-    cs int NOT NULL,
+    cs_per_minute int NOT NULL,
     missing_pings int NOT NULL,
     PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
