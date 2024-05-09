@@ -42,16 +42,16 @@ CREATE TABLE IF NOT EXISTS player_data (
 
 CREATE TABLE IF NOT EXISTS champion_bans (
     match_id varchar(15) NOT NULL,
-    ban_1 varchar(20) NOT NULL,
-    ban_2 varchar(20) NOT NULL,
-    ban_3 varchar(20) NOT NULL,
-    ban_4 varchar(20) NOT NULL,
-    ban_5 varchar(20) NOT NULL,
-    ban_6 varchar(20) NOT NULL,
-    ban_7 varchar(20) NOT NULL,
-    ban_8 varchar(20) NOT NULL,
-    ban_9 varchar(20) NOT NULL,
-    ban_10 varchar(20) NOT NULL,
+    ban_1 int NOT NULL,
+    ban_2 int NOT NULL,
+    ban_3 int NOT NULL,
+    ban_4 int NOT NULL,
+    ban_5 int NOT NULL,
+    ban_6 int NOT NULL,
+    ban_7 int NOT NULL,
+    ban_8 int NOT NULL,
+    ban_9 int NOT NULL,
+    ban_10 int NOT NULL,
     PRIMARY KEY (`match_id`)
 ) DEFAULT CHARSET=utf8;
 
