@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS match_data (
     dragon_kills tinyint NOT NULL,
     first_baron varchar(4) NOT NULL,
     surrender varchar(4) NOT NULL,
-  PRIMARY KEY (`match_id`)
+    CONSTRAINT PK_match_id PRIMARY KEY (`match_id`)
 );
 
 CREATE TABLE IF NOT EXISTS player_data (
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS player_data (
     match_id varchar(15) NOT NULL,
     team_id varchar(4) NOT NULL,
     lane varchar(4) NOT NULL,
-    'rank' varchar(10) NOT NULL,
+    `rank` varchar(10) NOT NULL,
     division tinyint NOT NULL,
     champion_name varchar(20) NOT NULL,
     first_blood tinyint NOT NULL,
@@ -37,7 +37,9 @@ CREATE TABLE IF NOT EXISTS player_data (
     dmg_to_towers int NOT NULL,
     cs_per_minute int NOT NULL,
     missing_pings int NOT NULL,
-    PRIMARY KEY (`id`)
+    CONSTRAINT PK_id PRIMARY KEY (`id`),
+    CONSTRAINT FK_player_data_match FOREIGN KEY (match_id) REFERENCES match_data(match_id),
+    CONSTRAINT FK_player_data_champion FOREIGN KEY (champion_name) REFERENCES champions(champion_name)
 );
 
 CREATE TABLE IF NOT EXISTS champion_bans (
@@ -52,11 +54,12 @@ CREATE TABLE IF NOT EXISTS champion_bans (
     ban_8 int NOT NULL,
     ban_9 int NOT NULL,
     ban_10 int NOT NULL,
-    PRIMARY KEY (`match_id`)
+    CONSTRAINT PK_champion_bans PRIMARY KEY (`match_id`),
+    CONSTRAINT FK_champion_bans_match FOREIGN KEY (match_id) REFERENCES match_data(match_id)
 );
 
 CREATE TABLE IF NOT EXISTS champions (
     champion_id int NOT NULL,
     champion_name varchar(20) NOT NULL,
-    PRIMARY KEY (`champion_id`)
+    CONSTRAINT PK_champion_id PRIMARY KEY (`champion_id`)
 );
