@@ -1,9 +1,9 @@
-# Jeremi Torój - 8/05/2024 a
+# Jeremi Torój - 8/05/2024
 
-CREATE DATABASE IF NOT EXISTS 'riot_api_data' DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `riot_api_data`;
+CREATE DATABASE IF NOT EXISTS riot_api_data DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE riot_api_data;
 
-CREATE TABLE IF NOT EXISTS `match_data` (
+CREATE TABLE IF NOT EXISTS match_data (
     match_id varchar(15) NOT NULL,
     game_duration int NOT NULL,
     win varchar(4) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `match_data` (
   PRIMARY KEY (`match_id`)
 ) DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `player_data` (
+CREATE TABLE IF NOT EXISTS player_data (
     id int NOT NULL AUTO_INCREMENT,
     match_id varchar(15) NOT NULL,
     team_id varchar(4) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `player_data` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `champion_bans` (
+CREATE TABLE IF NOT EXISTS champion_bans (
     match_id varchar(15) NOT NULL,
     ban_1 varchar(20) NOT NULL,
     ban_2 varchar(20) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `champion_bans` (
     PRIMARY KEY (`match_id`)
 ) DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `champions` (
+CREATE TABLE IF NOT EXISTS champions (
     champion_id int NOT NULL,
     champion_name varchar(20) NOT NULL,
     PRIMARY KEY (`champion_id`)
