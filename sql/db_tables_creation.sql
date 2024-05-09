@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS match_data (
     first_baron varchar(4) NOT NULL,
     surrender varchar(4) NOT NULL,
   PRIMARY KEY (`match_id`)
-) DEFAULT CHARSET=utf8;
+);
 
 CREATE TABLE IF NOT EXISTS player_data (
     id int NOT NULL AUTO_INCREMENT,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS player_data (
     cs_per_minute int NOT NULL,
     missing_pings int NOT NULL,
     PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8;
+);
 
 CREATE TABLE IF NOT EXISTS champion_bans (
     match_id varchar(15) NOT NULL,
@@ -53,10 +53,10 @@ CREATE TABLE IF NOT EXISTS champion_bans (
     ban_9 int NOT NULL,
     ban_10 int NOT NULL,
     PRIMARY KEY (`match_id`)
-) DEFAULT CHARSET=utf8;
+);
 
 CREATE TABLE IF NOT EXISTS champions (
     champion_id int NOT NULL,
     champion_name varchar(20) NOT NULL,
     PRIMARY KEY (`champion_id`)
-) DEFAULT CHARSET=utf8;
+);
