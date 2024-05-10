@@ -90,15 +90,13 @@ test = "SELECT * FROM champions"
 
 try:
     cursor = connection.cursor()
-    cursor.execute(database_creation)
-    cursor.execute(match_data_table)
-    cursor.execute(champions_table)
-    cursor.execute(player_data_table)
-    cursor.execute(champion_bans_table)
 
-    #cursor.execute(test_insert)
-
-    cursor.execute(test)
+    #print(cursor.execute(test_insert))
+    #always
+    connection.commit()
+    print(cursor.execute(test))
     print(cursor.fetchall())
+
+
 finally:
     connection.close()
