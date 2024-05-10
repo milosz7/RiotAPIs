@@ -1,29 +1,13 @@
-import pymysql
-from dotenv import load_dotenv
-import os
-from pathlib import Path
+CREATE DATABASE IF NOT EXISTS riot_api_data;
+USE riot_api_data;
 
-timeout = 10
-#insert your own path to .env file
-dotenv_path = Path('../../../Desktop/.env')
-load_dotenv(dotenv_path=dotenv_path)
+CREATE TABLE IF NOT EXISTS champions (
+    champion_id int NOT NULL,
+    champion_name varchar(20) NOT NULL,
+    CONSTRAINT PK_champion_id PRIMARY KEY (`champion_id`)
+);
 
-connection = pymysql.connect(
-    charset="utf8mb4",
-    connect_timeout=timeout,
-    cursorclass=pymysql.cursors.DictCursor,
-    db=os.getenv('DB'),
-    host=os.getenv('HOST'),
-    password=os.getenv('PASS'),
-    read_timeout=timeout,
-    port=11092,
-    user="avnadmin",
-    write_timeout=timeout,
-)
-
-database_creation = """CREATE DATABASE IF NOT EXISTS defaultdb;"""
-
-match_data_table = """CREATE TABLE IF NOT EXISTS match_data (
+CREATE TABLE IF NOT EXISTS match_data (
     match_id varchar(15) NOT NULL,
     game_duration int NOT NULL,
     win varchar(4) NOT NULL,
@@ -33,15 +17,8 @@ match_data_table = """CREATE TABLE IF NOT EXISTS match_data (
     surrender varchar(4) NOT NULL,
     CONSTRAINT PK_match_id PRIMARY KEY (`match_id`)
 );
-"""
 
-champions_table = """CREATE TABLE IF NOT EXISTS champions (
-    champion_id int NOT NULL,
-    champion_name varchar(20) NOT NULL,
-    CONSTRAINT PK_champion_id PRIMARY KEY (`champion_id`)
-);"""
-
-player_data_table = """CREATE TABLE IF NOT EXISTS player_data (
+CREATE TABLE IF NOT EXISTS player_data (
     id int NOT NULL AUTO_INCREMENT,
     match_id varchar(15) NOT NULL,
     team_id varchar(4) NOT NULL,
@@ -67,9 +44,9 @@ player_data_table = """CREATE TABLE IF NOT EXISTS player_data (
     CONSTRAINT PK_id PRIMARY KEY (`id`),
     CONSTRAINT FK_player_data_match FOREIGN KEY (match_id) REFERENCES match_data(match_id),
     CONSTRAINT FK_player_data_champion FOREIGN KEY (champion_id) REFERENCES champions(champion_id)
-);"""
+);
 
-champion_bans_table = """CREATE TABLE IF NOT EXISTS champion_bans (
+CREATE TABLE IF NOT EXISTS champion_bans (
     match_id varchar(15) NOT NULL,
     ban_1 int NOT NULL,
     ban_2 int NOT NULL,
@@ -83,22 +60,6 @@ champion_bans_table = """CREATE TABLE IF NOT EXISTS champion_bans (
     ban_10 int NOT NULL,
     CONSTRAINT PK_champion_bans PRIMARY KEY (`match_id`),
     CONSTRAINT FK_champion_bans_match FOREIGN KEY (match_id) REFERENCES match_data(match_id)
-);"""
+);
 
-test_insert = "INSERT INTO champions (champion_id, champion_name) VALUES (266, 'Aatrox')"
-test = "SELECT * FROM champions"
 
-try:
-    cursor = connection.cursor()
-    cursor.execute(database_creation)
-    cursor.execute(match_data_table)
-    cursor.execute(champions_table)
-    cursor.execute(player_data_table)
-    cursor.execute(champion_bans_table)
-
-    #cursor.execute(test_insert)
-
-    cursor.execute(test)
-    print(cursor.fetchall())
-finally:
-    connection.close()
