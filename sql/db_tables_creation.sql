@@ -3,6 +3,12 @@
 CREATE DATABASE IF NOT EXISTS riot_api_data;
 USE riot_api_data;
 
+CREATE TABLE IF NOT EXISTS champions (
+    champion_id int NOT NULL,
+    champion_name varchar(20) NOT NULL,
+    CONSTRAINT PK_champion_id PRIMARY KEY (`champion_id`)
+);
+
 CREATE TABLE IF NOT EXISTS match_data (
     match_id varchar(15) NOT NULL,
     game_duration int NOT NULL,
@@ -21,7 +27,7 @@ CREATE TABLE IF NOT EXISTS player_data (
     lane varchar(4) NOT NULL,
     `rank` varchar(10) NOT NULL,
     division tinyint NOT NULL,
-    champion_name varchar(20) NOT NULL,
+    champion_id int NOT NULL,
     first_blood tinyint NOT NULL,
     kills int NOT NULL,
     deaths int NOT NULL,
@@ -39,7 +45,7 @@ CREATE TABLE IF NOT EXISTS player_data (
     missing_pings int NOT NULL,
     CONSTRAINT PK_id PRIMARY KEY (`id`),
     CONSTRAINT FK_player_data_match FOREIGN KEY (match_id) REFERENCES match_data(match_id),
-    CONSTRAINT FK_player_data_champion FOREIGN KEY (champion_name) REFERENCES champions(champion_name)
+    CONSTRAINT FK_player_data_champion FOREIGN KEY (champion_id) REFERENCES champions(champion_id)
 );
 
 CREATE TABLE IF NOT EXISTS champion_bans (
@@ -58,8 +64,4 @@ CREATE TABLE IF NOT EXISTS champion_bans (
     CONSTRAINT FK_champion_bans_match FOREIGN KEY (match_id) REFERENCES match_data(match_id)
 );
 
-CREATE TABLE IF NOT EXISTS champions (
-    champion_id int NOT NULL,
-    champion_name varchar(20) NOT NULL,
-    CONSTRAINT PK_champion_id PRIMARY KEY (`champion_id`)
-);
+
