@@ -40,6 +40,13 @@ class DataPipeline:
         self.europe_base_url = "https://europe.api.riotgames.com"
         self.euw1_base_url = "https://euw1.api.riotgames.com"
         self.ranked_queue_id = 420
+        self.role_mapping = {
+            "TOP": "TOP",
+            "JUNGLE": "JNG",
+            "MIDDLE": "MID",
+            "BOTTOM": "BOT",
+            "UTILITY": "SUPP"
+        }
 
     def get_random_user_from_tier(self, tier):
         # tier selected randomly as we don't care about it that much
@@ -141,8 +148,7 @@ class DataPipeline:
 
         return match_data, player_data, ban_data
 
-    @staticmethod
-    def get_participants_data(participants_raw, game_duration_in_min, match_id):
+    def get_participants_data(self, participants_raw, game_duration_in_min, match_id):
         player_data = []
 
         for player in participants_raw:
@@ -156,7 +162,7 @@ class DataPipeline:
             player_info["vision_score_per_min"] = player["challenges"]["visionScorePerMinute"]
             player_info["champion_id"] = player["championId"]
             player_info["team_id"] = player["teamId"]
-            player_info["lane"] = player["teamPosition"]
+            player_info["lane"] = self.role_mapping[player["teamPosition"]]
             player_info["wards_placed"] = player["wardsPlaced"]
             player_info["wards_destroyed"] = player["wardsKilled"]
             player_info["dmg_taken_per_min"] = player["totalDamageTaken"] / game_duration_in_min
