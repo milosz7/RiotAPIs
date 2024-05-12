@@ -5,6 +5,27 @@ import requests
 
 
 class DataPipeline:
+    """
+    Class used for fetching data from Riot API.
+
+    :param dotenv_path: path to the .env file containing the API key.
+
+    Example usage:
+
+    >>> dotenv_path = '.env'
+    >>> print(os.path.abspath(dotenv_path))
+    >>> data_pipeline = DataPipeline(dotenv_path)
+    >>> summoner_id = data_pipeline.get_random_user_from_tier('GOLD')
+    >>> print(summoner_id)
+    >>> matches = data_pipeline.get_user_matches(summoner_id)
+    >>> print(matches)
+    >>> for match in matches:
+    >>>     result = data_pipeline.get_match_data(match)
+    >>>     if result is not None:
+    >>>         match_data, player_data, ban_data = result
+    >>>         # further preprocessing...
+    """
+
     def __init__(self, dotenv_path):
         load_dotenv(dotenv_path=dotenv_path)
         api_key_env_name = "RIOT_API_KEY"
@@ -18,6 +39,7 @@ class DataPipeline:
         self.queue = "RANKED_SOLO_5x5"
         self.europe_base_url = "https://europe.api.riotgames.com"
         self.euw1_base_url = "https://euw1.api.riotgames.com"
+        self.ranked_queue_id = 420
 
     def get_random_user_from_tier(self, tier):
         # tier selected randomly as we don't care about it that much
@@ -76,7 +98,7 @@ class DataPipeline:
 
         response = response.json()
         game_info = response["info"]
-        if game_info["gameMode"] != "CLASSIC":
+        if game_info["queueId"] != self.ranked_queue_id:
             return None
 
         if game_info["endOfGameResult"] != "GameComplete":
