@@ -83,10 +83,11 @@ class DatabaseConnection:
 
     def add_match(self, match_id: int, game_duration: int, win: str, first_drake: str, dragon_kills: int,
                   first_baron: str, surrender: int):
-        self.query("INSERT INTO match_data (match_id, game_duration, win,"
-                   " first_drake, dragon_kills, first_baron, surrender)"
-                   " VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                   (match_id, game_duration, win, first_drake, dragon_kills, first_baron, surrender))
+        columns = ["match_id", "game_duration", "win", "first_drake", "dragon_kills", "first_baron", "surrender"]
+        values = [match_id, game_duration, win, first_drake, dragon_kills, first_baron, surrender]
+        sql = self.generate_add_query("match_data", columns, values)
+
+        self.query(sql)
         self.connection.commit()
 
     def delete_match(self, match_id: int):
