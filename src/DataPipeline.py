@@ -142,8 +142,8 @@ class DataPipeline:
             "first_drake": first_dragon,
             "first_baron": first_baron,
             "game_duration": game_duration_in_min,
-            "players": player_data,
-            "team_surrendered": is_surrender,
+            "dragon_kills": blue_team["objectives"]["dragon"]["kills"] + red_team["objectives"]["dragon"]["kills"],
+            "surrender": is_surrender,
         }
 
         return match_data, player_data, ban_data
@@ -154,6 +154,7 @@ class DataPipeline:
         for player in participants_raw:
             player_info = dict()
             player_info["match_id"] = match_id
+            player_info["`rank`"], player_info["division"] = self.get_player_rank(player["summonerId"])
             player_info["kills"] = player["kills"]
             player_info["deaths"] = player["deaths"]
             player_info["assists"] = player["assists"]
@@ -176,3 +177,13 @@ class DataPipeline:
             player_data.append(player_info)
 
         return player_data
+
+    def get_player_rank(self, summoner_id):
+        summoner_info_url = "{}/lol/league/v4/entries/by-summoner/{}?api_key={}".format(self.euw1_base_url,
+                                                                                        summoner_id,
+                                                                                        self.api_key)
+        response = requests.get(summoner_info_url)
+        if response.status_code != 200:
+            raise ValueError(f"Error: {response.status_code}")
+        response = response.json()[0]
+        return response["tier"], response["rank"]
