@@ -113,15 +113,19 @@ class DatabaseConnection:
                         dmg_taken_per_min: int, total_time_dead: int, gold_per_min: int, wards_placed: int,
                         sight_wards_bought: int, wards_destroyed: int, vision_score_per_min: int, dmg_to_towers: int,
                         cs_per_min: int, missing_pings: int):
-        self.query("INSERT INTO player_data (match_id, team_id, lane, `rank`, division, champion_id,"
-                   " first_blood, kills, deaths, assists, dmg_per_min, dmg_taken_per_min, total_time_dead,"
-                   " gold_per_min, wards_placed, sight_wards_bought, wards_destroyed, vision_score_per_min,"
-                   " dmg_to_towers, cs_per_min, missing_pings)"
-                   " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-                   (match_id, team_id, lane, rank, division, champion_id, first_blood, kills, deaths,
-                    assists, dmg_per_min, dmg_taken_per_min, total_time_dead, gold_per_min, wards_placed,
-                    sight_wards_bought, wards_destroyed, vision_score_per_min, dmg_to_towers, cs_per_min,
-                    missing_pings))
+
+        columns = ["match_id", "team_id", "lane", "rank", "division", "champion_id", "first_blood", "kills", "deaths",
+                   "assists", "dmg_per_min", "dmg_taken_per_min", "total_time_dead", "gold_per_min", "wards_placed",
+                   "sight_wards_bought", "wards_destroyed", "vision_score_per_min", "dmg_to_towers", "cs_per_min",
+                   "missing_pings"]
+
+        values = [match_id, team_id, lane, rank, division, champion_id, first_blood, kills, deaths, assists,
+                  dmg_per_min, dmg_taken_per_min, total_time_dead, gold_per_min, wards_placed, sight_wards_bought,
+                  wards_destroyed, vision_score_per_min, dmg_to_towers, cs_per_min, missing_pings]
+
+        sql = self.generate_add_query("player_data", columns, values)
+
+        self.query(sql)
         self.connection.commit()
 
     def delete_player_data(self, match_id: int):
