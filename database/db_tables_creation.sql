@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS match_data (
     first_drake varchar(4) NOT NULL,
     dragon_kills tinyint NOT NULL,
     first_baron varchar(4) NOT NULL,
-    surrender varchar(4) NOT NULL,
+    surrender tinyint NOT NULL,
     CONSTRAINT PK_match_id PRIMARY KEY (`match_id`)
 );
 
