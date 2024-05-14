@@ -45,7 +45,11 @@ class DatabaseConnection:
         return self.query("SELECT * FROM champions")
 
     def add_champion(self, champ_id: int, name: str):
-        self.query("INSERT INTO champions (champion_id, champion_name) VALUES (%s, %s)", (champ_id, name))
+        columns = ["champion_id", "champion_name"]
+        values = [champ_id, name]
+
+        sql = self.generate_add_query("champions", columns, values)
+        self.query(sql)
         self.connection.commit()
 
     def delete_champion(self, champ_id: int):
