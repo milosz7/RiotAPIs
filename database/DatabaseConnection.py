@@ -35,8 +35,8 @@ class DatabaseConnection:
 
     @staticmethod
     def generate_add_query(table: str, columns: list, values: list):
-        return (f"INSERT INTO {table} ({', '.join(columns)}) VALUES " +
-                ', '.join((f"'{v}'" if isinstance(v, str) else str(v) for v in values))) + ";"
+        values = (f"'{v}'" if isinstance(v, str) else str(v) for v in values)
+        return f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join(values)});"
 
     @staticmethod
     def generate_update_query(table: str, condition: tuple, columns: list, values: list):
