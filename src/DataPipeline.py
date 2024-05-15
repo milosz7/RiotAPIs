@@ -183,11 +183,19 @@ class DataPipeline:
         return player_data
 
     def get_player_rank(self, summoner_id):
+        division_to_int = {"I": 1, "II": 2, "III": 3, "IV": 4}
         summoner_info_url = "{}/lol/league/v4/entries/by-summoner/{}?api_key={}".format(self.euw1_base_url,
                                                                                         summoner_id,
                                                                                         self.api_key)
         response = requests.get(summoner_info_url)
         if response.status_code != 200:
             raise ValueError(f"Error: {response.status_code}")
-        response = response.json()[0]
-        return response["tier"], response["rank"]
+        response = response.json()
+
+        # meaning the player is unranked
+        if not response:
+            return None, None
+
+        # returns data in an array of length 1
+        response = response[0]
+        return response["tier"], division_to_int[response["rank"]]
