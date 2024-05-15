@@ -38,8 +38,11 @@ class DatabaseConnection:
     def generate_add_query(table: str, columns: list, values: list):
         return f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join((str(v) for v in values))})"
 
-    def generate_update_query(self):
-        raise NotImplementedError
+    @staticmethod
+    def generate_update_query(table: str, condition: tuple, columns: list, values: list):
+        key_column, key_value = condition
+        set_clause = ", ".join([f"{col} = {val}" for col, val in zip(columns, values)])
+        return f"UPDATE {table} SET {set_clause} WHERE {key_column} = {key_value}"
 
     def get_champions(self):
         return self.query("SELECT * FROM champions")
@@ -56,8 +59,14 @@ class DatabaseConnection:
         self.query("DELETE FROM champions WHERE champion_id = %s", (champ_id,))
         self.connection.commit()
 
-    def update_champion(self, champ_id: int, name: str):
-        self.query("UPDATE champions SET champion_name = %s WHERE champion_id = %s", (name, champ_id))
+    def update_champion(self, champ_data: dict):
+        condition = ("champion_id", champ_data.pop("champion_id"))
+        columns = list(champ_data.keys())
+        values = list(champ_data.values())
+
+        sql = self.generate_update_query("champions", condition, columns, values)
+
+        self.query(sql)
         self.connection.commit()
 
     def get_champion_bans(self):
@@ -75,20 +84,23 @@ class DatabaseConnection:
         self.query("DELETE FROM champion_bans WHERE match_id = %s", (match_id,))
         self.connection.commit()
 
-    def update_champion_bans(self, match_id: int, ban_1: int, ban_2: int, ban_3: int, ban_4: int, ban_5: int,
-                             ban_6: int, ban_7: int, ban_8: int, ban_9: int, ban_10: int):
-        self.query("UPDATE champion_bans SET ban_1 = %s, ban_2 = %s, ban_3 = %s, ban_4 = %s, ban_5 = %s,"
-                   " ban_6 = %s, ban_7 = %s, ban_8 = %s, ban_9 = %s, ban_10 = %s WHERE match_id = %s",
-                   (ban_1, ban_2, ban_3, ban_4, ban_5, ban_6, ban_7, ban_8, ban_9, ban_10, match_id))
+    def update_champion_bans(self, ban_data: dict):
+        condition = ("match_id", ban_data.pop("match_id"))
+
+        columns = list(ban_data.keys())
+        values = list(ban_data.values())
+
+        sql = self.generate_update_query("champion_bans", condition, columns, values)
+
+        self.query(sql)
         self.connection.commit()
 
     def get_matches(self):
         return self.query("SELECT * FROM match_data")
 
-    def add_match(self, match_id: int, game_duration: int, win: str, first_drake: str, dragon_kills: int,
-                  first_baron: str, surrender: int):
-        columns = ["match_id", "game_duration", "win", "first_drake", "dragon_kills", "first_baron", "surrender"]
-        values = [match_id, game_duration, win, first_drake, dragon_kills, first_baron, surrender]
+    def add_match(self, match_data: dict):
+        columns = list(match_data.keys())
+        values = list(match_data.values())
         sql = self.generate_add_query("match_data", columns, values)
 
         self.query(sql)
@@ -98,11 +110,15 @@ class DatabaseConnection:
         self.query("DELETE FROM match_data WHERE match_id = %s", (match_id,))
         self.connection.commit()
 
-    def update_match(self, match_id: int, game_duration: int, win: str, first_drake: str, dragon_kills: int,
-                     first_baron: str, surrender: str):
-        self.query("UPDATE match_data SET game_duration = %s, win = %s, first_drake = %s, dragon_kills = %s,"
-                   " first_baron = %s, surrender = %s WHERE match_id = %s",
-                   (game_duration, win, first_drake, dragon_kills, first_baron, surrender, match_id))
+    def update_match(self, match_data: dict):
+        condition = ("match_id", match_data.pop("match_id"))
+
+        columns = list(match_data.keys())
+        values = list(match_data.values())
+
+        sql = self.generate_update_query("match_data", condition, columns, values)
+
+        self.query(sql)
         self.connection.commit()
 
     def get_player_data(self):
@@ -119,18 +135,13 @@ class DatabaseConnection:
         self.query("DELETE FROM player_data WHERE match_id = %s", (match_id,))
         self.connection.commit()
 
-    def update_player_data(self, match_id: int, team_id: int, lane: str, rank: str, division: int, champion_id: int,
-                           first_blood: int, kills: int, deaths: int, assists: int, dmg_per_min: int,
-                           dmg_taken_per_min: int, total_time_dead: int, gold_per_min: int, wards_placed: int,
-                           sight_wards_bought: int, wards_destroyed: int, vision_score_per_min: int, dmg_to_towers: int,
-                           cs_per_min: int, missing_pings: int):
+    def update_player_data(self, player_data: dict):
+        condition = ("id", player_data.pop("id"))
 
-        self.query("UPDATE player_data SET team_id = %s, lane = %s, `rank` = %s, division = %s, champion_id = %s,"
-                   " first_blood = %s, kills = %s, deaths = %s, assists = %s, dmg_per_min = %s,"
-                   " dmg_taken_per_min = %s, total_time_dead = %s, gold_per_min = %s, wards_placed = %s,"
-                   " sight_wards_bought = %s, wards_destroyed = %s, vision_score_per_min = %s,"
-                   " dmg_to_towers = %s, cs_per_min = %s, missing_pings = %s WHERE match_id = %s",
-                   (team_id, lane, rank, division, champion_id, first_blood, kills, deaths, assists, dmg_per_min,
-                    dmg_taken_per_min, total_time_dead, gold_per_min, wards_placed, sight_wards_bought, wards_destroyed,
-                    vision_score_per_min, dmg_to_towers, cs_per_min, missing_pings, match_id))
+        columns = list(player_data.keys())
+        values = list(player_data.values())
+
+        sql = self.generate_update_query("player_data", condition, columns, values)
+
+        self.query(sql)
         self.connection.commit()
