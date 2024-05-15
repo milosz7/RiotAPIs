@@ -35,7 +35,7 @@ class DatabaseConnection:
 
     @staticmethod
     def generate_add_query(table: str, columns: list, values: list):
-        values = (f"'{v}'" if isinstance(v, str) else str(v) for v in values)
+        values = (f"'{v}'" if isinstance(v, str) or v is None else str(v) for v in values)
         return f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join(values)});"
 
     @staticmethod
