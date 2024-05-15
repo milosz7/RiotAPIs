@@ -35,14 +35,14 @@ class DatabaseConnection:
 
     @staticmethod
     def generate_add_query(table: str, columns: list, values: list):
-        return f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join((f"'{v}'" if isinstance(v, str) 
-                                                                                else str(v) for v in values))});"
+        return (f"INSERT INTO {table} ({', '.join(columns)}) VALUES " +
+                ', '.join((f"'{v}'" if isinstance(v, str) else str(v) for v in values))) + ";"
 
     @staticmethod
     def generate_update_query(table: str, condition: tuple, columns: list, values: list):
         key_column, key_value = condition
         set_clause = ", ".join([f"{col} = {val}" for col, val in zip(columns, values)])
-        return f"UPDATE {table} SET {set_clause} WHERE {key_column} = {key_value}"
+        return f"UPDATE {table} SET {set_clause} WHERE {key_column} = {key_value};"
 
     def get_champions(self):
         return self.query("SELECT * FROM champions")
