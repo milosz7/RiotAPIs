@@ -96,7 +96,6 @@ class DataPipeline:
 
     @staticmethod
     def get_bans(team):
-        print(team["bans"])
         return [ban["championId"] for ban in team["bans"]]
 
     def get_match_data(self, match_id):
@@ -192,10 +191,10 @@ class DataPipeline:
             raise ValueError(f"Error: {response.status_code}")
         response = response.json()
 
-        # meaning the player is unranked
-        if not response:
+        # https://github.com/RiotGames/developer-relations/issues/795
+        # IndexError in case the player is unranked
+        try:
+            response = response[0]
+            return response["tier"], division_to_int[response["rank"]]
+        except (KeyError, IndexError):
             return None, None
-
-        # returns data in an array of length 1
-        response = response[0]
-        return response["tier"], division_to_int[response["rank"]]
