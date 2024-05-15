@@ -1,5 +1,3 @@
-# Jeremi Torój - 8/05/2024
-
 CREATE DATABASE IF NOT EXISTS riot_api_data;
 USE riot_api_data;
 
@@ -16,7 +14,7 @@ CREATE TABLE IF NOT EXISTS match_data (
     first_drake varchar(4) NOT NULL,
     dragon_kills tinyint NOT NULL,
     first_baron varchar(4) NOT NULL,
-    surrender varchar(4) NOT NULL,
+    surrender tinyint NOT NULL,
     CONSTRAINT PK_match_id PRIMARY KEY (`match_id`)
 );
 
@@ -25,8 +23,8 @@ CREATE TABLE IF NOT EXISTS player_data (
     match_id varchar(15) NOT NULL,
     team_id varchar(4) NOT NULL,
     lane varchar(4) NOT NULL,
-    `rank` varchar(10) NOT NULL,
-    division tinyint NOT NULL,
+    `rank` varchar(10),
+    division tinyint,
     champion_id int NOT NULL,
     first_blood tinyint NOT NULL,
     kills int NOT NULL,
@@ -39,9 +37,9 @@ CREATE TABLE IF NOT EXISTS player_data (
     wards_placed int NOT NULL,
     sight_wards_bought int NOT NULL,
     wards_destroyed int NOT NULL,
-    vision_score_per_minute int NOT NULL,
+    vision_score_per_min int NOT NULL,
     dmg_to_towers int NOT NULL,
-    cs_per_minute int NOT NULL,
+    cs_per_min int NOT NULL,
     missing_pings int NOT NULL,
     CONSTRAINT PK_id PRIMARY KEY (`id`),
     CONSTRAINT FK_player_data_match FOREIGN KEY (match_id) REFERENCES match_data(match_id),
