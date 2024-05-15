@@ -32,7 +32,7 @@ class DataPipeline:
         self.api_key = os.getenv(api_key_env_name)
 
         if self.api_key is None:
-            raise ValueError(f"Environment variable f{api_key_env_name} not found.")
+            raise ValueError(f"Environment variable {api_key_env_name} not found.")
 
         self.divisions = ["I", "II", "III", "IV"]
         self.tiers = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND"]
@@ -62,6 +62,10 @@ class DataPipeline:
             raise ValueError(f"Error: {response.status_code}")
 
         response = response.json()
+
+        if not response:
+            return None
+
         summoner_id = response[0]["summonerId"]
 
         return summoner_id
