@@ -31,12 +31,12 @@ class DatabaseConnection:
 
     def query(self, query: str, args: tuple = ()):
         with self.connection.cursor() as cursor:
-            cursor.execute(query, args)
-            return cursor.fetchall()
+            return cursor.execute(query, args)
 
     @staticmethod
     def generate_add_query(table: str, columns: list, values: list):
-        return f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join((str(v) for v in values))})"
+        return f"INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join((f"'{v}'" if isinstance(v, str) 
+                                                                                else str(v) for v in values))});"
 
     @staticmethod
     def generate_update_query(table: str, condition: tuple, columns: list, values: list):
@@ -52,12 +52,17 @@ class DatabaseConnection:
         values = [champ_id, name]
 
         sql = self.generate_add_query("champions", columns, values)
-        self.query(sql)
+
+        rows_affected = self.query(sql)
         self.connection.commit()
 
+        return rows_affected
+
     def delete_champion(self, champ_id: int):
-        self.query("DELETE FROM champions WHERE champion_id = %s", (champ_id,))
+        rows_affected = self.query("DELETE FROM champions WHERE champion_id = %s", (champ_id,))
         self.connection.commit()
+
+        return rows_affected
 
     def update_champion(self, champ_data: dict):
         condition = ("champion_id", champ_data.pop("champion_id"))
@@ -66,8 +71,10 @@ class DatabaseConnection:
 
         sql = self.generate_update_query("champions", condition, columns, values)
 
-        self.query(sql)
+        rows_affected = self.query(sql)
         self.connection.commit()
+
+        return rows_affected
 
     def get_champion_bans(self):
         return self.query("SELECT * FROM champion_bans")
@@ -77,12 +84,16 @@ class DatabaseConnection:
         ban_values = [match_id] + bans
 
         sql = self.generate_add_query("champion_bans", ban_columns, ban_values)
-        self.query(sql)
+        rows_affected = self.query(sql)
         self.connection.commit()
 
+        return rows_affected
+
     def delete_champion_bans(self, match_id: int):
-        self.query("DELETE FROM champion_bans WHERE match_id = %s", (match_id,))
+        rows_affected = self.query("DELETE FROM champion_bans WHERE match_id = %s", (match_id,))
         self.connection.commit()
+
+        return rows_affected
 
     def update_champion_bans(self, ban_data: dict):
         condition = ("match_id", ban_data.pop("match_id"))
@@ -92,8 +103,10 @@ class DatabaseConnection:
 
         sql = self.generate_update_query("champion_bans", condition, columns, values)
 
-        self.query(sql)
+        rows_affected = self.query(sql)
         self.connection.commit()
+
+        return rows_affected
 
     def get_matches(self):
         return self.query("SELECT * FROM match_data")
@@ -103,12 +116,16 @@ class DatabaseConnection:
         values = list(match_data.values())
         sql = self.generate_add_query("match_data", columns, values)
 
-        self.query(sql)
+        rows_affected = self.query(sql)
         self.connection.commit()
 
+        return rows_affected
+
     def delete_match(self, match_id: int):
-        self.query("DELETE FROM match_data WHERE match_id = %s", (match_id,))
+        rows_affected = self.query("DELETE FROM match_data WHERE match_id = %s", (match_id,))
         self.connection.commit()
+
+        return rows_affected
 
     def update_match(self, match_data: dict):
         condition = ("match_id", match_data.pop("match_id"))
@@ -118,8 +135,10 @@ class DatabaseConnection:
 
         sql = self.generate_update_query("match_data", condition, columns, values)
 
-        self.query(sql)
+        rows_affected = self.query(sql)
         self.connection.commit()
+
+        return rows_affected
 
     def get_player_data(self):
         return self.query("SELECT * FROM player_data")
@@ -128,12 +147,16 @@ class DatabaseConnection:
         columns = list(player_data.keys())
         values = list(player_data.values())
         sql = self.generate_add_query("player_data", columns, values)
-        self.query(sql)
+        rows_affected = self.query(sql)
         self.connection.commit()
 
+        return rows_affected
+
     def delete_player_data(self, match_id: int):
-        self.query("DELETE FROM player_data WHERE match_id = %s", (match_id,))
+        rows_affected = self.query("DELETE FROM player_data WHERE match_id = %s", (match_id,))
         self.connection.commit()
+
+        return rows_affected
 
     def update_player_data(self, player_data: dict):
         condition = ("id", player_data.pop("id"))
@@ -143,5 +166,7 @@ class DatabaseConnection:
 
         sql = self.generate_update_query("player_data", condition, columns, values)
 
-        self.query(sql)
+        rows_affected = self.query(sql)
         self.connection.commit()
+
+        return rows_affected
