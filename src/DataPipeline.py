@@ -200,4 +200,4 @@ class DataPipeline:
             response = response[0]
             return response["tier"], division_to_int[response["rank"]]
         except (KeyError, IndexError):
-            return None, None
+            return "UNRANKED", 0
