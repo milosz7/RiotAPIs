@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import os
 import numpy as np
 import requests
+import time
 
 
 class DataPipeline:
@@ -47,6 +48,21 @@ class DataPipeline:
             "BOTTOM": "BOT",
             "UTILITY": "SUPP"
         }
+        self.requests_made = 0
+        self.requests_limit = 100
+        self.request_timeout_in_s = 120
+
+    def make_request(self, url):
+        if self.requests_made == self.requests_limit:
+            print("Request limit reached. Waiting for dos minutos...")
+            time.sleep(self.request_timeout_in_s + 1)
+            self.requests_made = 0
+        response = requests.get(url)
+        if response.status_code != 200:
+            raise ValueError(f"Error: {response.status_code}")
+        self.requests_made += 1
+        print(f"Requests made: {self.requests_made}")
+        return response.json()
 
     def get_random_user_from_tier(self, tier):
         # tier selected randomly as we don't care about it that much
@@ -57,12 +73,7 @@ class DataPipeline:
                                                                                     tier,
                                                                                     division,
                                                                                     self.api_key)
-        response = requests.get(summoner_id_url)
-        if response.status_code != 200:
-            raise ValueError(f"Error: {response.status_code}")
-
-        response = response.json()
-
+        response = self.make_request(summoner_id_url)
         if not response:
             return None
 
@@ -74,16 +85,14 @@ class DataPipeline:
         summoner_info_url = "{}/lol/summoner/v4/summoners/{}?api_key={}".format(self.euw1_base_url,
                                                                                 summoner_id,
                                                                                 self.api_key)
-        response = requests.get(summoner_info_url)
-        if response.status_code != 200:
-            raise ValueError(f"Error: {response.status_code}")
-        puuid = response.json()["puuid"]
+        response = self.make_request(summoner_info_url)
+        puuid = response["puuid"]
 
         matches_url = "{}/lol/match/v5/matches/by-puuid/{}/ids?start=0&count=20&api_key={}".format(self.europe_base_url,
                                                                                                    puuid,
                                                                                                    self.api_key)
-        response = requests.get(matches_url)
-        return response.json()
+        response = self.make_request(matches_url)
+        return response
 
     @staticmethod
     def declare_team_first(blue, red, column):
@@ -102,11 +111,8 @@ class DataPipeline:
         match_url = "{}/lol/match/v5/matches/{}?api_key={}".format(self.europe_base_url,
                                                                    match_id,
                                                                    self.api_key)
-        response = requests.get(match_url)
-        if response.status_code != 200:
-            raise ValueError(f"Error: {response.status_code}")
+        response = self.make_request(match_url)
 
-        response = response.json()
         game_info = response["info"]
         if game_info["queueId"] != self.ranked_queue_id:
             return None
@@ -186,10 +192,7 @@ class DataPipeline:
         summoner_info_url = "{}/lol/league/v4/entries/by-summoner/{}?api_key={}".format(self.euw1_base_url,
                                                                                         summoner_id,
                                                                                         self.api_key)
-        response = requests.get(summoner_info_url)
-        if response.status_code != 200:
-            raise ValueError(f"Error: {response.status_code}")
-        response = response.json()
+        response = self.make_request(summoner_info_url)
 
         # https://github.com/RiotGames/developer-relations/issues/795
         # IndexError in case the player is unranked
