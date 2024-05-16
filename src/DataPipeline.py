@@ -164,6 +164,7 @@ class DataPipeline:
         for player in participants_raw:
             player_info = dict()
             player_info["match_id"] = match_id
+            player_info["summoner_id"] = player["summonerId"]
             player_info["`rank`"], player_info["division"] = self.get_player_rank(player["summonerId"])
             player_info["kills"] = player["kills"]
             player_info["deaths"] = player["deaths"]
