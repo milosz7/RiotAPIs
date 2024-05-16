@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS player_data (
     cs_per_min float(24) NOT NULL,
     missing_pings int NOT NULL,
     CONSTRAINT PK_id PRIMARY KEY (`id`),
-    CONSTRAINT COMPOSITE_id PRIMARY KEY (match_id, summoner_id)
+    CONSTRAINT COMPOSITE_id PRIMARY KEY (match_id, summoner_id),
     CONSTRAINT FK_player_data_match FOREIGN KEY (match_id) REFERENCES match_data(match_id),
     CONSTRAINT FK_player_data_champion FOREIGN KEY (champion_id) REFERENCES champions(champion_id)
 );
