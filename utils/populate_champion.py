@@ -1,6 +1,6 @@
 import requests
 from dotenv import find_dotenv
-from database.DatabaseConnection import DatabaseConnection
+from src.DatabaseConnection import DatabaseConnection
 
 
 def fetch_champions():

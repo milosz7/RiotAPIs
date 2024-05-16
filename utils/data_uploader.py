@@ -1,4 +1,4 @@
-from database.DatabaseConnection import DatabaseConnection
+from src.DatabaseConnection import DatabaseConnection
 from src.DataPipeline import DataPipeline
 from dotenv import find_dotenv
 from random import choice
