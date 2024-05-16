@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS champions (
 
 CREATE TABLE IF NOT EXISTS match_data (
     match_id varchar(15) NOT NULL,
-    game_duration int NOT NULL,
+    game_duration float(24) NOT NULL,
     win varchar(4) NOT NULL,
     first_drake varchar(4) NOT NULL,
     dragon_kills tinyint NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS match_data (
 
 CREATE TABLE IF NOT EXISTS player_data (
     match_id varchar(15) NOT NULL,
-    summoner_id varchar(15) NOT NULL,
+    summoner_id varchar(50) NOT NULL,
     team_id varchar(4) NOT NULL,
     lane varchar(4) NOT NULL,
     `rank` varchar(10),
@@ -30,18 +30,18 @@ CREATE TABLE IF NOT EXISTS player_data (
     kills int NOT NULL,
     deaths int NOT NULL,
     assists int NOT NULL,
-    dmg_per_min int NOT NULL,
-    dmg_taken_per_min int NOT NULL,
-    total_time_dead int NOT NULL,
-    gold_per_min int NOT NULL,
+    dmg_per_min float(24) NOT NULL,
+    dmg_taken_per_min float(24) NOT NULL,
+    total_time_dead float(24) NOT NULL,
+    gold_per_min float(24) NOT NULL,
     wards_placed int NOT NULL,
     sight_wards_bought int NOT NULL,
     wards_destroyed int NOT NULL,
     vision_score_per_min float(24) NOT NULL,
-    dmg_to_towers int NOT NULL,
+    dmg_to_towers float(24) NOT NULL,
     cs_per_min float(24) NOT NULL,
     missing_pings int NOT NULL,
-    CONSTRAINT COMPOSITE_id PRIMARY KEY (match_id, summoner_id),
+    CONSTRAINT COMPOSITE_id PRIMARY KEY (match_id, champion_id),
     CONSTRAINT FK_player_data_match FOREIGN KEY (match_id) REFERENCES match_data(match_id),
     CONSTRAINT FK_player_data_champion FOREIGN KEY (champion_id) REFERENCES champions(champion_id)
 );
