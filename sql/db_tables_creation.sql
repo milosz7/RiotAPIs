@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS match_data (
 );
 
 CREATE TABLE IF NOT EXISTS player_data (
-    id int NOT NULL AUTO_INCREMENT,
     match_id varchar(15) NOT NULL,
     summoner_id varchar(15) NOT NULL,
     team_id varchar(4) NOT NULL,
@@ -42,7 +41,6 @@ CREATE TABLE IF NOT EXISTS player_data (
     dmg_to_towers int NOT NULL,
     cs_per_min float(24) NOT NULL,
     missing_pings int NOT NULL,
-    CONSTRAINT PK_id PRIMARY KEY (`id`),
     CONSTRAINT COMPOSITE_id PRIMARY KEY (match_id, summoner_id),
     CONSTRAINT FK_player_data_match FOREIGN KEY (match_id) REFERENCES match_data(match_id),
     CONSTRAINT FK_player_data_champion FOREIGN KEY (champion_id) REFERENCES champions(champion_id)
