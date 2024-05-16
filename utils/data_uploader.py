@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from src.DatabaseConnection import DatabaseConnection
 from src.DataPipeline import DataPipeline
 from dotenv import find_dotenv
@@ -17,8 +21,8 @@ if __name__ == "__main__":
     start = time.time()
     time_to_run_in_sec = 3600
     while True:
-        if time.time() - start > time_to_run_in_sec:
-            break
+        # if time.time() - start > time_to_run_in_sec:
+        #     break
         summoner_id = data_pipeline.get_random_user_from_tier(choice(tiers))
         matches = data_pipeline.get_user_matches(summoner_id)
         for match in matches:
