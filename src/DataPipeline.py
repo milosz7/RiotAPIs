@@ -46,7 +46,8 @@ class DataPipeline:
             "JUNGLE": "JNG",
             "MIDDLE": "MID",
             "BOTTOM": "BOT",
-            "UTILITY": "SUPP"
+            "UTILITY": "SUPP",
+            "": None
         }
         self.requests_made = 0
         self.requests_limit = 100
