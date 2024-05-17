@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 import os
 import numpy as np
 import requests
@@ -28,13 +27,8 @@ class DataPipeline:
     """
 
     def __init__(self, dotenv_path):
-        load_dotenv(dotenv_path=dotenv_path)
-        api_key_env_name = "RIOT_API_KEY"
         self.api_key = input("API KEY: ")
         print("Input accepted!")
-
-        if self.api_key is None:
-            raise ValueError(f"Environment variable {api_key_env_name} not found.")
 
         self.divisions = ["I", "II", "III", "IV"]
         self.tiers = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND"]
