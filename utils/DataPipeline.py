@@ -30,7 +30,8 @@ class DataPipeline:
     def __init__(self, dotenv_path):
         load_dotenv(dotenv_path=dotenv_path)
         api_key_env_name = "RIOT_API_KEY"
-        self.api_key = os.getenv(api_key_env_name)
+        self.api_key = input("API KEY: ")
+        print("Input accepted!")
 
         if self.api_key is None:
             raise ValueError(f"Environment variable {api_key_env_name} not found.")
