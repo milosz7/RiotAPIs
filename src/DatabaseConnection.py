@@ -45,7 +45,13 @@ class DatabaseConnection:
         return f"UPDATE {table} SET {set_clause} WHERE {key_column} = {key_value};"
 
     def get_champions(self):
-        return self.query("SELECT * FROM champions")
+        # fix this method so it returns
+        self.query("SELECT * FROM champions")
+
+    def execute_select_query(self, query: str, args: tuple = ()):
+        with self.connection.cursor() as cursor:
+            cursor.execute(query, args)
+            return cursor.fetchall()
 
     def add_champion(self, champ_id: int, name: str):
         columns = ["champion_id", "champion_name"]
